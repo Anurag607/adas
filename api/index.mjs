@@ -31,7 +31,7 @@ const entrySchema = new mongoose.Schema({
 });
 const Entry = mongoose.model('Entry', entrySchema);
 
-app.post('/image-upload', upload.single('img'), async (req, res) => {
+app.post('/create', upload.single('img'), async (req, res) => {
     const { file, body: { msg, date } } = req;
     if (!file) {
         return res.status(400).json({ msg: "No image uploaded" });
@@ -39,13 +39,13 @@ app.post('/image-upload', upload.single('img'), async (req, res) => {
 
     const formData = new FormData();
     formData.append('upload_preset', 'nextbit');
-    formData.append('cloud_name', process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME);
-    formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY);
-    formData.append('api_secret', process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET);
+    formData.append('cloud_name', "dotwawzhk");
+    formData.append('api_key', "431663952246561");
+    formData.append('api_secret', "_qxJlxQnwC4ZiOBUB6Sl26jL6Qg");
     formData.append('file', file.buffer, { filename: file.originalname });
 
     try {
-        const response = await axios.post(process.env.NEXT_PUBLIC_CLOUDINARY_URL, formData, {
+        const response = await axios.post('https://api.cloudinary.com/v1_1/dotwawzhk/image/upload', formData, {
             headers: formData.getHeaders(),
             onUploadProgress: progressEvent => {
                 let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
@@ -65,7 +65,7 @@ app.post('/image-upload', upload.single('img'), async (req, res) => {
     }
 });
 
-app.get('/entries', async (req, res) => {
+app.get('/read', async (req, res) => {
     try {
         const entries = await Entry.find();
         res.json(entries);
@@ -74,7 +74,7 @@ app.get('/entries', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 8000;
+const PORT = 8000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
